@@ -1,0 +1,124 @@
+<div class="container mt-5 dark-theme">
+  <h1 class="text-center mb-4">All Work Details</h1>
+
+  <!-- Check if there are orders -->
+  {{#if orders}}
+    <div class="table-responsive">
+      <table class="table table-dark table-striped table-bordered">
+        <thead>
+          <tr>
+            <th>Technician Name</th>
+            <th>Slot</th>
+            <th>Fair</th>
+            <th>Status</th>
+            <th>Booking Date</th>
+            <th>User's Name</th>
+            <th>User's Address</th>
+            <th>User's Phone No</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each orders}}
+            <tr>
+              <td>{{this.productName}}</td>
+              <td>{{this.quantity}}</td>
+              <td>{{this.totalPrice}}</td>
+              <td>
+                <span class="status-badge {{this.orderStatus}}">{{this.orderStatus}}</span>
+              </td>
+              <td>{{this.orderDate}}</td>
+              <td>{{this.userName}}</td>
+              <td>{{this.userAddress}}</td>
+              <td>{{this.userPhone}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  {{else}}
+    <p class="text-center no-orders">No orders found.</p>
+  {{/if}}
+</div>
+
+<!-- Link to Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- Dark Theme Styles -->
+<style>
+  /* Make full background black */
+  body {
+    background-color: black !important;
+    color: #e0e0e0;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Dark Theme for Content */
+  .dark-theme {
+    background-color: #121212;
+    color: #e0e0e0;
+    padding: 40px;
+    border-radius: 10px;
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  .no-orders {
+    font-size: 1.5rem;
+    color: #b0b0b0;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  /* Table Styling */
+  .table-dark {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+  }
+
+  .table-dark th {
+    background-color: #333;
+    color: white;
+    font-size: 1.1rem;
+    font-family: Arial, sans-serif;
+  }
+
+  .table-dark td {
+    background-color: #252525;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    color: #e0e0e0;
+  }
+
+  .table-bordered th,
+  .table-bordered td {
+    border-color: #444;
+  }
+
+  th, td {
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  /* Status Badges */
+  .status-badge {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .status-badge.Pending {
+    background-color: #ffc107;
+    color: black;
+  }
+
+  .status-badge.Completed {
+    background-color: #28a745;
+    color: white;
+  }
+
+  .status-badge.Cancelled {
+    background-color: #dc3545;
+    color: white;
+  }
+</style>

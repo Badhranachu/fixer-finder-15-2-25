@@ -1,0 +1,82 @@
+<div class="container mt-5">
+  <h1 class="text-center text-light mb-5">Your Previous Bookings</h1>
+
+  {{#if orders.length}}
+  <div class="row">
+    {{#each orders}}
+    <a href="/each-product/{{productId}}" class="col-md-4 mb-4">
+      <div class="card shadow-lg rounded-lg border-dark bg-dark text-light overflow-hidden">
+        <img src="{{productImage}}" alt="{{productName}}" class="card-img-top" style="height: 250px; object-fit: cover;">
+        <div class="card-body">
+          <h5 class="card-title text-warning">{{productName}}</h5>
+          <p class="card-text"><strong>Fair:</strong> ₹{{totalPrice}}</p>
+          <p class="card-text"><strong>Payment Method:</strong> {{paymentMethod}}</p>
+          <p class="card-text"><strong>Status:</strong> {{orderStatus}}</p>
+          <p class="card-text"><strong>Booking Date:</strong> {{orderDateFormatted}}</p>
+        </div>
+        <div class="card-footer bg-secondary text-center">
+          <small class="text-light">View Details</small>
+        </div>
+      </div>
+    </a>
+
+    <!-- Modal for full-size image -->
+    <div class="modal fade" id="imageModal{{@index}}" tabindex="-1" aria-labelledby="imageModalLabel{{@index}}" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-light">
+          <div class="modal-header border-secondary">
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <img src="{{productImage}}" alt="{{productName}}" class="img-fluid w-100">
+          </div>
+        </div>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+  {{else}}
+  <p class="text-center text-muted">No confirmed bookings found.</p>
+  {{/if}}
+</div>
+
+<style>
+  body {
+    background-color: #121212;
+    color: #f8f9fa;
+  }
+
+  a {
+    text-decoration: none;
+    color: white;
+  }
+
+  a:hover {
+    text-decoration: none;
+    color: #ffcc00;
+  }
+
+  .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: #1e1e1e;
+    border: 1px solid #333;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 10px 30px rgba(255, 204, 0, 0.2);
+  }
+
+  .card-footer {
+    background-color: #2a2a2a;
+  }
+
+  .modal-content {
+    background-color: #1e1e1e;
+    color: #f8f9fa;
+  }
+
+  .btn-close-white {
+    filter: invert(1);
+  }
+</style>

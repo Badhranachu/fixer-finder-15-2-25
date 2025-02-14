@@ -1,0 +1,158 @@
+<div class="container mt-5">
+  <h1 class="text-center mb-4 text-light">Slot Bookings</h1>
+
+  {{#if product}}
+  <div class="row justify-content-center">
+    <div class="col-md-6 mb-4">
+      <div class="card custom-card">
+        <div class="card-body">
+          <h4 class="card-title text-primary">Your Personal Details</h4>
+          <img src="{{user.imagePath}}" alt="Profile Image" class="profile-img" />
+          <p><strong>Name:</strong> {{user.Name}}</p>
+          <p><strong>Email:</strong> {{user.Email}}</p>
+          <p><strong>Phone:</strong> {{user.PhoneNumber}}</p>
+          <p><strong>Address:</strong> {{user.Address}}</p>
+          <p><strong>Place:</strong> {{user.Place}}</p>
+          <p class="text-warning"><strong>Technician will contact you at this address.</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+      <div class="card custom-card">
+        <div class="card-body" style="height:338px;padding: 6px;margin-top: 109px;">
+          <h4 class="card-title text-info">Technician Details</h4>
+          <div class="row">
+            <div class="col-md-4">
+              <img src="/product-images/{{product._id}}.jpg" alt="{{product.name}}" class="product-image" />
+            </div>
+            <div class="col-md-8">
+              <h5 class="text-light">{{product.name}}</h5>
+              <p><strong>Description:</strong> {{product.description}}</p>
+              <p><strong>Category:</strong> {{product.category}}</p>
+
+              <div class="input-group mt-3">
+                <button class="btn btn-outline-warning" id="decrementBtn">-</button>
+                <input type="text" class="form-control text-center" value="1" id="quantityInput" readonly />
+                <button class="btn btn-outline-warning" id="incrementBtn">+</button>
+              </div>
+              <p class="mt-3 text-success"><strong>Fair:</strong> ₹<span id="totalPrice">{{product.price}}</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4 text-center">
+    <form action="/payment" method="POST">
+      <input type="hidden" name="productId" value="{{product._id}}" />
+      <input type="hidden" name="productName" value="{{product.name}}" />
+      <input type="hidden" name="productPrice" value="{{product.price}}" />
+      <input type="hidden" name="quantity" id="quantityInputForm" />
+      <input type="hidden" name="totalPrice" id="totalPriceInput" />
+      <button type="submit" class="btn btn-primary btn-lg">Confirm Booking</button>
+    </form>
+  </div>
+  {{else}}
+  <p class="text-center text-light">Product not found in your cart.</p>
+  {{/if}}
+</div>
+
+<style>
+  body {
+    background-color: #121212;
+    color: #f1f1f1;
+    font-family: 'Poppins', sans-serif;
+  }
+  .container {
+    max-width: 1000px;
+  }
+  .custom-card {
+    background: #1e1e1e;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 16px rgba(0, 255, 255, 0.2);
+  }
+  .profile-img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid cyan;
+  }
+  .product-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid cyan;
+  }
+  .btn-primary {
+    background-color: cyan;
+    border: none;
+    font-size: 18px;
+    padding: 10px 20px;
+    transition: 0.3s;
+  }
+  .btn-primary:hover {
+    background-color: #00cccc;
+  }
+  .btn-outline-warning {
+    color: yellow;
+    border: 1px solid yellow;
+  }
+  .btn-outline-warning:hover {
+    background-color: yellow;
+    color: black;
+  }
+</style>
+
+<script>
+  // Get the product price from the page
+  var productPrice = parseInt("{{product.price}}");
+
+  // Function to update hidden inputs
+  function updateHiddenInputs() {
+    var quantity = parseInt(document.getElementById("quantityInput").value);
+    var totalPrice = productPrice * quantity;
+
+    // Update hidden inputs
+    document.getElementById("quantityInputForm").value = quantity;
+    document.getElementById("totalPriceInput").value = totalPrice;
+  }
+
+  // Function to update the total price
+  function updateTotalPrice() {
+    var quantity = parseInt(document.getElementById("quantityInput").value);
+    var totalPrice = productPrice * quantity;
+    document.getElementById("totalPrice").textContent = totalPrice;
+
+    // Sync hidden inputs
+    updateHiddenInputs();
+  }
+
+  // Add functionality to increment and decrement buttons
+  document.getElementById("incrementBtn").addEventListener("click", function () {
+    var quantityInput = document.getElementById("quantityInput");
+    quantityInput.value = parseInt(quantityInput.value) + 1;
+    updateTotalPrice();
+  });
+
+  document.getElementById("decrementBtn").addEventListener("click", function () {
+    var quantityInput = document.getElementById("quantityInput");
+    if (parseInt(quantityInput.value) > 1) {
+      quantityInput.value = parseInt(quantityInput.value) - 1;
+      updateTotalPrice();
+    }
+  });
+
+  // Initialize total price and hidden inputs on page load
+  updateTotalPrice();
+</script>
+
+<style>
+  #decrementBtn ,#incrementBtn{
+    display: none;
+  }
+</style>

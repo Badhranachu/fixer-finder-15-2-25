@@ -1,0 +1,56 @@
+<div class="container mt-5 text-light">
+  {{#if errorMessage}}
+    <h2 class="text-center mb-4 text-danger fw-bold">Not Enough Slots for the Technician</h2>
+    <div class="text-center">
+      <img src="{{productImage}}" alt="{{productName}}" class="img-fluid mb-4 rounded shadow-lg" style="max-height: 200px; border-radius: 15px;"/>
+      <div class="card bg-dark text-light p-4 shadow-lg border-danger rounded-4">
+        <h4 class="card-title text-danger mb-3 fw-bold"><strong>Technician:</strong> {{productName}}</h4>
+        <p class="card-text"><strong>Available Slots:</strong> {{availableQuantity}}</p>
+      </div>
+    </div>
+    <p class="text-center mt-4 text-warning">Unfortunately, there aren’t enough slots available to fulfill your booking.</p>
+    <div class="text-center mt-3">
+      <a href="/" class="btn btn-outline-light btn-lg mx-2 rounded-pill shadow"> <i class="bi bi-house"></i> Back to Home </a>
+    </div>
+  {{else}}
+    <h2 class="text-center mb-4 text-success fw-bold">Slot Confirmed!</h2>
+    <div class="text-center">
+      <img src="{{productImage}}" alt="{{productName}}" class="img-fluid mb-4 rounded shadow-lg" style="max-height: 200px; border-radius: 15px;"/>
+      <div class="card bg-dark text-light p-4 shadow-lg border-success rounded-4">
+        <h4 class="card-title text-success mb-3 fw-bold"><strong>Technician:</strong> {{productName}}</h4>
+        <p class="card-text"><strong>Slot:</strong> {{quantity}}</p>
+        <p class="card-text"><strong>Fair:</strong> ₹{{totalPrice}}</p>
+        <p class="card-text"><strong>Payment Method:</strong> {{paymentMethod}}</p>
+      </div>
+    </div>
+    <p class="text-center mt-4 text-info">Thank you for your booking! The technician will arrive at your home soon!</p>
+    <div class="text-center mt-3">
+      <a href="/" class="btn btn-outline-light btn-lg mx-2 rounded-pill shadow"> <i class="bi bi-house"></i> Home </a>
+      <a href="/orders" class="btn btn-outline-secondary btn-lg mx-2 rounded-pill shadow"> <i class="bi bi-card-list"></i> Bookings </a>
+    </div>
+  {{/if}}
+</div>
+
+<style>
+  body {
+    background-color: #121212;
+    color: #e0e0e0;
+  }
+  .card {
+    background: rgba(40, 40, 40, 0.9);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease-in-out;
+  }
+  .card:hover {
+    transform: scale(1.03);
+  }
+  .btn-outline-light:hover {
+    background-color: #f8f9fa;
+    color: #212529;
+  }
+  .btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: #fff;
+  }
+</style>
