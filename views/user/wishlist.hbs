@@ -1,0 +1,117 @@
+{{!-- Wishlist Page --}}
+<div class="container mt-4">
+    <h2 class="text-center mb-4 text-light">My Wishlist</h2>
+
+    <div id="alert-box" class="alert alert-success text-center d-none"></div>
+
+    {{#if error}}
+        <div class="alert alert-danger text-center">{{error}}</div>
+    {{/if}}
+
+    <div class="row">
+        {{#each products}}
+            <div class="col-md-4" id="wishlist-item-{{this._id}}">
+                <div class="card wishlist-card shadow-lg">
+                    <a href="/each-product/{{this._id}}" class="wishlist-link">
+                        <img src="{{this.imagePath}}" class="card-img-top wishlist-img" alt="{{this.name}}">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-light">{{this.name}}</h5>
+                            <p class="text-info">{{this.category}}</p>
+                            <p class="fw-bold text-warning">₹{{this.price}}</p>
+                            <p class="card-text text-secondary">{{this.description}}</p>
+                        </div>
+                    </a>
+                    <div class="text-center mt-2 pb-3">
+                        <button type="button" class="btn btn-danger wishlist-remove-btn" onclick="removeFromWishlist('{{this._id}}', '{{this.name}}')">
+                            <i class="fas fa-trash-alt"></i> Remove
+                        </button>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</div>
+
+<!-- Dark Theme Styles -->
+<style>
+    body {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+
+    .wishlist-card {
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+        background: #1e1e1e;
+        border: 1px solid #333;
+    }
+
+    .wishlist-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(0, 255, 255, 0.4);
+    }
+
+    .wishlist-img {
+        height: 200px;
+        object-fit: cover;
+        border-bottom: 3px solid #007bff;
+    }
+
+    .wishlist-link {
+        text-decoration: none;
+        color: #f8f9fa;
+    }
+
+    .wishlist-link:hover {
+        text-decoration: none;
+        color: #00d9ff;
+    }
+
+    .wishlist-remove-btn {
+        font-size: 14px;
+        padding: 8px 12px;
+        background-color: #ff5252;
+        border: none;
+        color: #fff;
+        transition: 0.3s;
+    }
+
+    .wishlist-remove-btn:hover {
+        background-color: #ff1744;
+        box-shadow: 0 0 10px rgba(255, 23, 68, 0.7);
+    }
+</style>
+
+<!-- JavaScript -->
+<script>
+function removeFromWishlist(productId, productName) {
+    fetch('/remove-from-wishlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Show Bootstrap alert box
+            const alertBox = document.getElementById("alert-box");
+            alertBox.textContent = `Removed "${productName}" from wishlist`;
+            alertBox.classList.remove("d-none");
+            alertBox.classList.add("show");
+
+            // Remove the product from the UI without refreshing
+            const productCard = document.getElementById(`wishlist-item-${productId}`);
+            if (productCard) {
+                productCard.remove();
+            }
+        } else {
+            alert("Error: " + data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Error removing from wishlist:", error);
+        alert("An error occurred. Please try again.");
+    });
+}
+</script>

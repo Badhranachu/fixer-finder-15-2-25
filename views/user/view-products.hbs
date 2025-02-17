@@ -1,0 +1,306 @@
+<section>
+  <div class="modal fade" id="wishlistModal" tabindex="-1" aria-labelledby="wishlistModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content dark-modal">
+        <div class="modal-header">
+          <h5 class="modal-title" id="wishlistModalLabel">Wishlist Update</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          {{!-- Product has been added to your wishlist! --}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="head text-center">
+    <h1>All Technicians</h1>
+  </div>
+
+  <div class="container mt-5">
+    <div class="row">
+      {{#each products}}
+        <a href="/each-product/{{this._id}}" class="product-link">
+          <div class="card product-card">
+            <img class="card-img-top" src="/product-images/{{this._id}}.jpg" alt="Product Image" onerror="this.onerror=null;this.src='/product-images/placeholder.jpg';">
+            
+            <form action="/add-to-wishlist" method="POST" class="wishlist-form" id="wishlistForm-{{this._id}}">
+              <input type="hidden" name="productId" value="{{this._id}}">
+              <input type="hidden" name="productName" value="{{this.name}}">
+              <input type="hidden" name="userId" value="{{user._id}}">
+            </form>
+
+            <a href="javascript:void(0);" onclick="addToWishlist('{{this._id}}', '{{this.productName}}')">
+              <i class="fa-regular fa-heart fa-2xl wishlist-icon"></i>
+            </a>
+
+            <div class="card-body">
+              <h3 class="card-title">{{this.name}}</h3>
+              <h4>₹ {{this.price}} per/work</h4>
+              <p class="card-text">{{this.category}}</p>
+              <div class="add-to-cart-message" style="display: none;"></div>
+              <div class="button-container">
+                {{#if this.quantity}}
+                  {{!-- <button type="submit" class="add-to-cart btn btn-warning btn-block">ADD TO CART</button> --}}
+                {{else}}
+                  <p class="out-of-stock">Sorry!! Technician is Busy</p>
+                {{/if}}
+              </div>
+            </div>
+          </div>
+        </a>
+      {{/each}}
+    </div>
+  </div>
+</section>
+
+<!-- Dark Theme Styles -->
+<style>
+  /* General Dark Theme */
+  body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: 'Poppins', sans-serif;
+  }
+
+  /* Modal Styling */
+  .dark-modal {
+      background-color: #1e1e1e;
+      color: #f8f9fa;
+  }
+
+  .modal-header {
+      background-color: #007bff;
+      color: white;
+  }
+
+  .modal-footer .btn-primary {
+      background-color: #007bff;
+      border: none;
+  }
+
+  /* Heading */
+  .head h1 {
+      color: #fff;
+      font-weight: 600;
+      text-transform: uppercase;
+  }
+
+  /* Card Layout */
+  .product-card {
+      background: #1e1e1e;
+      border: 1px solid #333;
+      box-shadow: 0px 5px 15px rgba(0, 255, 255, 0.2);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease-in-out;
+      position: relative;
+      padding: 15px;
+  }
+
+  .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0px 8px 20px rgba(0, 255, 255, 0.3);
+  }
+
+  .product-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 8px;
+      border-bottom: 3px solid #00bcd4;
+  }
+
+  .card-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #f8f9fa;
+  }
+
+  .card-text {
+      font-size: 14px;
+      color: #b0b0b0;
+  }
+
+  h4 {
+      color: #ffcc00;
+      font-weight: 600;
+  }
+
+  /* Button Styling */
+  .add-to-cart, .wishlist-btn {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      transition: 0.3s;
+  }
+
+  .add-to-cart {
+      background-color: #ffcc00;
+      color: black;
+  }
+
+  .add-to-cart:hover {
+      background-color: #e6b800;
+  }
+
+  .wishlist-btn {
+      background-color: #ff4d4d;
+      color: white;
+  }
+
+  .wishlist-btn:hover {
+      background-color: #d32f2f;
+  }
+
+  /* Wishlist Icon */
+  .wishlist-icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      color: #ff5252;
+      cursor: pointer;
+      transition: color 0.3s ease;
+  }
+
+  .wishlist-icon:hover {
+      color: #ff1744;
+  }
+
+  /* Out of Stock Message */
+  .out-of-stock {
+      color: #ff3d00;
+      font-weight: bold;
+      font-size: 16px;
+      text-align: center;
+  }
+
+  /* Hover Popup */
+  .hover-popup {
+      position: absolute;
+      bottom: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.85);
+      color: white;
+      font-size: 14px;
+      padding: 10px;
+      border-radius: 5px;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out, bottom 0.3s ease-in-out;
+      width: 80%;
+      text-align: center;
+  }
+
+  .product-card:hover .hover-popup {
+      opacity: 1;
+      bottom: 10px;
+  }
+
+  /* Alert Styles */
+  .cart-alert {
+      background-color: #ffcc00 !important;
+      color: #333 !important;
+      font-weight: bold;
+      border-radius: 10px;
+  }
+
+  .wishlist-alert {
+      background-color: #ff4d4d !important;
+      color: white !important;
+      font-weight: bold;
+      border-radius: 10px;
+  }
+</style>
+
+<!-- Include SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  // Function to display SweetAlert2 notifications with different styles
+function showAlert(iconType, alertMessage, alertType) {
+    let customClass = alertType === "cart" ? "cart-alert" : "wishlist-alert";
+
+    Swal.fire({
+        toast: true,
+        position: "top",
+        icon: iconType,
+        title: alertMessage,
+        showConfirmButton: false,
+        timer: 2500,
+        timerProgressBar: true,
+        customClass: {
+            popup: customClass // Apply different styles
+        }
+    });
+}
+
+// Add to Cart Function
+function submitAddToCart(event, form) {
+    event.preventDefault();
+    const formData = new FormData(form);
+
+    fetch("/addtocart", {
+        method: "POST",
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        let iconType = "success";
+        let alertMessage = "Added to cart successfully!";
+
+        if (data.error) {
+            iconType = "error";
+            alertMessage = data.error;
+        } else if (data.showAlert) { // If already in cart
+            iconType = "info";
+            alertMessage = data.message;
+        } else if (data.successMessage) {
+            alertMessage = data.successMessage;
+        }
+
+        showAlert(iconType, alertMessage, "cart");
+    })
+    .catch(error => {
+        console.error("Error adding to cart:", error);
+        showAlert("error", "An error occurred. Please try again.", "cart");
+    });
+}
+
+// Add to Wishlist Function
+function addToWishlist(productId, productName) {
+    fetch('/add-to-wishlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ productId, productName })
+    })
+    .then(response => response.json())
+    .then(data => {
+        let iconType = "success";
+        let alertMessage = `Added "${productName}" to wishlist`;
+
+        if (data.message.includes("already in wishlist")) {
+            iconType = "info";  
+            alertMessage = `"${productName}" is already in your wishlist`;
+        } else if (data.message.includes("removed")) {
+            iconType = "warning";  
+            alertMessage = `Removed "${productName}" from wishlist`;
+        }
+
+        showAlert(iconType, alertMessage, "wishlist");
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        showAlert("error", "An error occurred. Please try again.", "wishlist");
+    });
+}
+
+</script>

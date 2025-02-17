@@ -1,0 +1,134 @@
+<section class="admin-section">
+  <div class="container">
+    <!-- Admin Product Management -->
+    <div class="row">
+      <div class="col text-end">
+        <a href="/admin/addproducts" class="btn btn-success mt-3">Add Technician</a>
+      </div>
+    </div>
+
+    <!-- Show delete message if exists -->
+    {{#if deleteMessage}}
+      <p class="text-danger text-center mt-3">{{deleteMessage}}</p>
+    {{/if}}
+
+    <h2 class="text-center mt-4">Admin - All Technicians</h2>
+
+    {{#if products.length}}
+      <div class="table-responsive mt-4">
+        <table class="table table-dark table-striped table-bordered">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">No</th>
+              <th scope="col">Name</th>
+              <th scope="col">Category</th>
+              <th scope="col">Price</th>
+              <th scope="col">Slot</th>
+              <th scope="col">Photo</th>
+              <th scope="col">Status</th>
+              <th scope="col">Edit Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each products}}
+            <tr>
+              <th scope="row">{{@index}}</th>
+              <td>{{this.name}}</td>
+              <td>{{this.category}}</td>
+              <td>{{this.price}}</td>
+              <td>{{this.quantity}}</td>
+              <td>
+                {{#if this.imagePath}}
+                  <img src="{{this.imagePath}}" class="img-fluid img-thumbnail" alt="Technician Image" />
+                {{else}}
+                  <span>No Image</span>
+                {{/if}}
+              </td>
+              <td>
+                <a href="/admin/toggle-show/{{this._id}}">
+                  <button class="btn {{#if this.isShown}}btn-primary{{else}}btn-warning{{/if}}">
+                    {{#if this.isShown}}Shown{{else}}Unshown{{/if}}
+                  </button>
+                </a>
+              </td>
+              <td>
+                <a href="/admin/edit-product/{{this._id}}" class="btn btn-success">Edit</a>
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    {{else}}
+      <p class="text-center mt-5">No technicians available. <a href="/admin/addproducts">Add some technicians</a></p>
+    {{/if}}
+  </div>
+</section>
+
+<!-- Dark Theme Styles -->
+<style>
+  /* Dark Theme Background */
+  .admin-section {
+  background-color: #121212;
+  color: #e0e0e0;
+  padding: 50px 0;
+  /* Remove the fixed height */
+  min-height: 100vh; /* Ensures it covers the full viewport height */
+}
+
+
+  /* Table Styling */
+  .table-dark {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+  }
+
+  .table-dark th {
+    background-color: #333;
+    color: #fff;
+  }
+
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #2c2c2c;
+  }
+
+  .table-bordered th,
+  .table-bordered td {
+    border-color: #444;
+  }
+
+  /* Buttons */
+  .btn-success {
+    background-color: #28a745;
+    border: none;
+  }
+
+  .btn-success:hover {
+    background-color: #218838;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+
+  .btn-warning {
+    background-color: #ffc107;
+    border: none;
+    color: black;
+  }
+
+  .btn-warning:hover {
+    background-color: #e0a800;
+  }
+
+  /* Image */
+  .img-thumbnail {
+    max-width: 100px;
+    border-radius: 8px;
+  }
+</style>
